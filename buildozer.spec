@@ -10,8 +10,8 @@ package.domain = com
 # الإصدار
 version = 1.0
 
-# متطلبات بايثون
-requirements = python3,kivy,android,plyer,requests
+# متطلبات بايثون (تم تحديد إصدار بايثون المستقر وإزالة android)
+requirements = python3==3.10.12,kivy,plyer,requests
 
 # اتجاه الشاشة
 orientation = portrait
@@ -22,15 +22,11 @@ fullscreen = 0
 # الصلاحيات
 android.permissions = READ_CONTACTS,READ_EXTERNAL_STORAGE,WRITE_EXTERNAL_STORAGE,INTERNET
 
-# إصدار SDK
-android.api = 30
+# إصدار SDK و NDK المستقرين جداً
+android.api = 31
 android.minapi = 21
-
-# إصدار NDK (الأهم: يجب أن يكون 28c)
-android.ndk = 28c
-
-# إصدار SDK (يُستخدم مع NDK)
-android.sdk = 30
+android.ndk = 25b
+android.accept_sdk_license = True
 
 # ملف المصدر
 source.dir = .
