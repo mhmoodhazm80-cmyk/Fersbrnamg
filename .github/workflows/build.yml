@@ -23,11 +23,7 @@ jobs:
         sudo apt update
         sudo apt install -y build-essential git python3-pip ccache libffi-dev libssl-dev libltdl-dev openjdk-17-jdk zip unzip
         pip install --upgrade pip setuptools
-        pip install "cython<3.0.0" buildozer
-
-    - name: Accept Android SDK Licenses
-      run: |
-        yes | sdkmanager --licenses || true
+        pip install "cython<3.0.0" "buildozer==1.5.0"
 
     - name: Build APK with Buildozer
       run: |
