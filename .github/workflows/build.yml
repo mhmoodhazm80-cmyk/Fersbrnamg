@@ -25,9 +25,13 @@ jobs:
         pip install --upgrade pip setuptools
         pip install "cython<3.0.0" buildozer
 
-    - name: Build APK
+    - name: Accept Android SDK Licenses
       run: |
-        buildozer -v android debug
+        yes | sdkmanager --licenses || true
+
+    - name: Build APK with Buildozer
+      run: |
+        yes | buildozer -v android debug
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
